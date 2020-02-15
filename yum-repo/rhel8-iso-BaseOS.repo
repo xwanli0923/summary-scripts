@@ -1,0 +1,5 @@
+[rhel8-iso-BaseOS]
+name=Red Hat Enterprise Linux 8.0 iso BaseOS repository
+baseurl=file:///mnt/rhel8-iso/BaseOS
+enabled=1
+gpgcheck=0

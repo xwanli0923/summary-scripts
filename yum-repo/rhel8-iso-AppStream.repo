@@ -1,0 +1,5 @@
+[rhel8-iso-AppStream]
+name=Red Hat Enterprise Linux 8.0 iso AppStream repository
+baseurl=file:///mnt/rhel8-iso/AppStream
+enabled=1
+gpgcheck=0
