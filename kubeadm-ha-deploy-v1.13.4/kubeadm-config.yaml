@@ -1,0 +1,32 @@
+apiServer:
+  certSANs:
+    - kube-master0
+    - kube-master1
+    - kube-master2
+    - master.lab.example.com
+    - 192.168.5.86
+    - 192.168.5.81
+    - 192.168.5.82
+    - 192.168.5.83
+    - 127.0.0.1
+  extraArgs:
+    authorization-mode: Node,RBAC
+  timeoutForControlPlane: 4m0s
+apiVersion: kubeadm.k8s.io/v1beta1
+certificatesDir: /etc/kubernetes/pki
+clusterName: kubernetes
+controlPlaneEndpoint: "master.lab.example.com:16443"
+controllerManager: {}
+dns:
+  type: CoreDNS
+etcd:
+  local:
+    dataDir: /var/lib/etcd
+imageRepository: registry.aliyuncs.com/google_containers
+kind: ClusterConfiguration
+kubernetesVersion: v1.13.4
+networking:
+  dnsDomain: cluster.local
+  podSubnet: 10.20.0.0/16
+  serviceSubnet: 10.10.0.0/16
+scheduler: {}
