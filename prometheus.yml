@@ -1,0 +1,28 @@
+---
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  # The job name is added as a label 'job=<job_name>' to any timeseries scraped from this config.
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['10.197.11.192:9090']
+  - job_name: 'ceph'
+    honor_labels: true
+    static_configs:
+      - targets: ['ceph-node1.lab.example.com:9283']
+        labels:
+          instance: 'ceph_cluster'
+      - targets: ['ceph-node2.lab.example.com:9283']
+        labels:
+          instance: 'ceph_cluster'
+      - targets: ['ceph-node3.lab.example.com:9283']
+        labels:
+          instance: 'ceph_cluster'
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['ceph-node1.lab.example.com:9100']
+      - targets: ['ceph-node2.lab.example.com:9100']
+      - targets: ['ceph-node3.lab.example.com:9100']
