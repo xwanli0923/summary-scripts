@@ -1,0 +1,16 @@
+Note:
+
+This shell script deploy-rsyslog-viewer.sh is used to deploy loganalyzer to display
+rsyslog log data which is in MySQL database.
+
+Architecture as following:
+  user --> loganalyzer(httpd & php) container --> MySQL container <-- rsyslog server 
+  rsyslog client --> rsyslog server
+    
+In this case, rsyslog server, loganalyzer container and MySQL container have been 
+deployed at the same node(AIO).
+
+You should prepare Quay v3.3.0 registry in your environment, or load associated 
+container image on the node.
+
+Also you can use this script to deploy on the different nodes.
