@@ -13,5 +13,8 @@ container image on the node.
 
 Also you can use this script to deploy on the different nodes.
 
-If use this script in other environment, please replace container image tag.
-Prefix of all container images is quay.io/alberthua/{container_name}:[tag].
+If use this script in other environment, please replace as followings:
+  1. variables
+  2. yum repository
+  3. container image tag
+  4. prefix of all container images should be quay.io/alberthua/{container_name}:[tag].
