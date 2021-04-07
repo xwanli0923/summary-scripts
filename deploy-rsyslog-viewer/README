@@ -1,5 +1,3 @@
-Note:
-
 This shell script deploy-rsyslog-viewer.sh is used to deploy loganalyzer to display
 rsyslog log data which is in MySQL database.
 
@@ -14,3 +12,6 @@ You should prepare Quay v3.3.0 registry in your environment, or load associated
 container image on the node.
 
 Also you can use this script to deploy on the different nodes.
+
+If use this script in other environment, please replace container image tag.
+Prefix of all container images is quay.io/alberthua/{container_name}:[tag].
