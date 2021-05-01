@@ -1,2 +1,2 @@
 # summary-scripts
-Include scripts, config files and so on.
+Include Shell and Python scripts, configuration files, Kickstart file and so on.
