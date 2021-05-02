@@ -19,5 +19,3 @@ If use this script in other environment, please replace as followings:
 2. yum repository: please pay attention to podman version
 3. container image tag
 4. prefix of all container images: quay.io/alberthua/{container_name}:[tag]
-
-![10](C:\Users\DELL\Desktop\rsyslog同步日志至MySQL数据库容器部署\10.JPG)
