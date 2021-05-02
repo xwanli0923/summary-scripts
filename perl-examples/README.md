@@ -1,3 +1,3 @@
 # **perl-examples** #
 
-summary-perl repository includes Bioinfomatrics about NGS, system admin scripts and so on.
+perl-examples repository includes Bioinfomatrics about NGS, system admin scripts and so on.
