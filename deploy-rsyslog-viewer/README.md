@@ -19,3 +19,5 @@ If use this script in other environment, please replace as followings:
 2. yum repository: please pay attention to podman version
 3. container image tag
 4. prefix of all container images: quay.io/alberthua/{container_name}:[tag]
+
+![1](https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/loganalyzer-web.jpg)
