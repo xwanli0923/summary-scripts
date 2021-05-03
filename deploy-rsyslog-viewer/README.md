@@ -28,9 +28,7 @@
    
 3. 此次使用 `podman runtime` 容器运行时运行所有容器。
 
-4. 该部署环境中已预配置 `Red Hat Quay 3.3.0`，并且已将 `mysql-57-rhel7:latest` 上传
-
-   至该容器镜像仓库中的 `rhscl organization` 中。
+4. 该部署环境中已预配置 `Red Hat Quay 3.3.0`，并且已将 `mysql-57-rhel7:latest` 上传至该容器镜像仓库中的 `rhscl organization` 中。
 
 5. 将容器镜像上传至 Quay 中，需提前创建相应的 organizaion，否则将上传失败报错！
 
@@ -38,14 +36,11 @@
 
    ![](https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/quay-push-error-2.JPG)
 
-6. 务必关闭并禁用节点 `firewalld` 服务，该服务与 `iptables NAT` 规则冲突，在启用的情况下
+6. 务必关闭并禁用节点 `firewalld` 服务，该服务与 `iptables NAT` 规则冲突，在启用的情况下将无法实现容器的端口映射，iptables NAT 规则无法建立！
 
-   将无法实现容器的端口映射，iptables NAT 规则无法建立！
-
-7. 由于 loganalyzer 容器与 MySQL 容器均位于同一节点上，且容器通过 `CNI bridge` (cni-podman0)
-   连接，因此 loganalyzer 连接 MySQL 时应使用该 CNI bridge 的 IP 地址，MySQL 对指定用户的
-
-   授权语句也应使用该 IP 地址，否则在前端 Web 上无法建立连接。
+7. 由于 loganalyzer 容器与 MySQL 容器均位于同一节点上，且容器通过 `CNI bridge` (cni-podman0) 连接，
+   因此 loganalyzer 连接 MySQL 时应使用该 CNI bridge 的 IP 地址，MySQL 对指定用户的授权语句也应使用
+   该 IP 地址，否则在前端 Web 上无法建立连接。
 
    ```sql
    grant all on Syslog.* to '${SYSLOG_USER}'@'${CNI_GATEWAY}' identified by '${SYSLOG_PASS}';
@@ -65,9 +60,7 @@
 
     ![](https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/mysql-container-run-error.JPG)
 
-11. loganalyzer 容器与 MySQL 容器部署成功且正常运行后，需访问 loganalyzer 容器所在节点
-
-    以完成两者的对接，如下所示：
+11. loganalyzer 容器与 MySQL 容器部署成功且正常运行后，需访问 loganalyzer 容器所在节点以完成两者的对接，如下所示：
 
     ![](https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/loganalyzer-web-1.JPG)
 
@@ -93,8 +86,6 @@
 
 1. loganalyzer 也可直接使用解压的压缩包（PHP 源码）实现安装，方法位于部署脚本的最后注释部分。
 
-2. SELinux 为 enforcing 模式时，loganalyzer 无法与 MySQL 容器连接，需打开 PHP 与 MySQL
-
-   的网络连接布尔值以支持。
+2. SELinux 为 enforcing 模式时，loganalyzer 无法与 MySQL 容器连接，需打开 PHP 与 MySQL的网络连接布尔值以支持。
 
    ![](https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/selinux-php-mysql-connection.JPG)
