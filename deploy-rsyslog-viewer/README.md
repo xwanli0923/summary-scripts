@@ -20,7 +20,9 @@
    
 2. 部署用节点：
    a. serverb.lab.example.com (RH294v8.0 course)：2 vCPU，4GiB RAM
+
    b. firewalld 服务已禁用
+   
    c. SELinux 为 enforcing 模式
    
 3. 此次使用 `podman runtime` 容器运行时运行所有容器。
@@ -28,6 +30,7 @@
 4. 该部署环境中已预配置 `Red Hat Quay 3.3.0`，并且已将 `mysql-57-rhel7:latest` 上传至该容器镜像仓库中的 `rhscl organization` 中。
 
 5. 将容器镜像上传至 Quay 中，需提前创建相应的 organizaion，否则将上传失败报错！
+
    ![](https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/quay-push-error-1.JPG)
 
    ![](https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/quay-push-error-2.JPG)
@@ -42,15 +45,18 @@
    ```
 
 8. loganalyzer 容器镜像基于 `Apache httpd server` 构建，参考如下：
+
    https://github.com/Alberthua-Perl/Dockerfile-examples/tree/master/loganalyzer-viewer
 
 9. loganalyzer 项目基于 PHP，可作为 MySQL 数据库检索日志数据的 Web 前端。
 
 10. MySQL 容器使用持久化存储（卷映射）时，由于使用 Red Hat 官方镜像，启动容器时不使用 root 用户运行 mysql 守护进程，
     而使用 **UID 27** (mysql) 运行，需设置宿主机映射目录的所有者与所属组，不更改将无法运行容器，容器中报错日志如下所示：
+    
     ![](https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/mysql-container-run-error.JPG)
 
 11. loganalyzer 容器与 MySQL 容器部署成功且正常运行后，需访问 loganalyzer 容器所在节点以完成两者的对接，如下所示：
+
     ![](https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/loganalyzer-web-1.JPG)
 
     ![](https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/loganalyzer-web-2.JPG)
@@ -76,4 +82,5 @@
 1. loganalyzer 也可直接使用解压的压缩包（PHP 源码）实现安装，方法位于部署脚本的最后注释部分。
 
 2. SELinux 为 enforcing 模式时，loganalyzer 无法与 MySQL 容器连接，需打开 PHP 与 MySQL的网络连接布尔值以支持。
+
    ![](https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/selinux-php-mysql-connection.JPG)
