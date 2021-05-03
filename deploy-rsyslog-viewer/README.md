@@ -16,9 +16,11 @@
 #### loganalyzer 与 MySQL 的容器化部署要点：
 
 1. 部署用 Shell 脚本参考如下：
+
    https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/deploy-rsyslog-viewer.sh
    
 2. 部署用节点：
+
    a. serverb.lab.example.com (RH294v8.0 course)：2 vCPU，4GiB RAM
 
    b. firewalld 服务已禁用
