@@ -1,0 +1,100 @@
+# 部署loganalyzer管理集中式日志
+#### 文档说明：
+
+1. OS 版本：Red Hat Enterprise Linux 8.2 (Ootpa)
+2. Podman 版本：podman-1.9.3-2.module+el8.2.1+6867+366c07d6.x86_64
+3. loganalyzer 版本：loganalyzer-4.1.11.tar.gz
+4. 该示例中使用 yum 安装的软件包若未指定特定版本均为系统自带软件包。
+
+#### 架构示例：
+
+<img src="D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-mysql-rsyslogserver.jpg" alt="loganalyzer-mysql-rsyslogserver"  />
+
+如图所示，`rsyslog-server` 服务端收集来自 `rsyslog-client` 客户端发送的指定系统
+日志数据，并且 Apache httpd server 与 MySQL 数据库均已容器的方式一同部署于服务端。
+
+
+#### loganalyzer 与 MySQL 的容器化部署要点：
+
+1. 部署用 Shell 脚本参考如下：
+   https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/deploy-rsyslog-viewer.sh
+   
+2. 部署用节点：
+   a. serverb.lab.example.com (RH294v8.0 course)：2 vCPU，4GiB RAM
+   
+   b. firewalld 服务已禁用
+   
+   c. SELinux 为 enforcing 模式
+   
+3. 此次使用 `podman runtime` 容器运行时运行所有容器。
+
+4. 该部署环境中已预配置 `Red Hat Quay 3.3.0`，并且已将 `mysql-57-rhel7:latest` 上传
+
+   至该容器镜像仓库中的 `rhscl organization` 中。
+
+5. 将容器镜像上传至 Quay 中，需提前创建相应的 organizaion，否则将上传失败报错！
+
+   <img src="D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\quay-push-error-1.JPG"  />
+
+   <img src="D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\quay-push-error-2.JPG"  />
+
+6. 务必关闭并禁用节点 `firewalld` 服务，该服务与 `iptables NAT` 规则冲突，在启用的情况下
+
+   将无法实现容器的端口映射，iptables NAT 规则无法建立！
+
+7. 由于 loganalyzer 容器与 MySQL 容器均位于同一节点上，且容器通过 `CNI bridge` (cni-podman0)
+   连接，因此 loganalyzer 连接 MySQL 时应使用该 CNI bridge 的 IP 地址，MySQL 对指定用户的
+
+   授权语句也应使用该 IP 地址，否则在前端 Web 上无法建立连接。
+
+   ```sql
+   grant all on Syslog.* to '${SYSLOG_USER}'@'${CNI_GATEWAY}' identified by '${SYSLOG_PASS}';
+   ```
+
+8. loganalyzer 容器镜像基于 `Apache httpd server` 构建，参考如下：
+
+   https://github.com/Alberthua-Perl/Dockerfile-examples/tree/master/loganalyzer-viewer
+
+9. loganalyzer 项目基于 PHP，可作为 MySQL 数据库检索日志数据的 Web 前端。
+
+10. MySQL 容器使用持久化存储（卷映射）时，由于使用 Red Hat 官方镜像，启动容器时不使用 root 
+
+    用户运行 mysql 守护进程，而使用 **UID 27** (mysql) 运行，需设置宿主机映射目录的所有者与所属组，
+
+    不更改将无法运行容器，容器中报错日志如下所示：
+
+    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\mysql-container-run-error.JPG)
+
+11. loganalyzer 容器与 MySQL 容器部署成功且正常运行后，需访问 loganalyzer 容器所在节点
+
+    以完成两者的对接，如下所示：
+
+    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-web-1.JPG)
+
+    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-web-2.JPG)
+
+    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-web-3.JPG)
+
+    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-web-4.JPG)
+
+    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-web-5.JPG)
+
+    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-web-6.JPG)
+
+    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-web-7.JPG)
+
+    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-web-8.JPG)
+
+    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-web-9.JPG)
+
+    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-web-10.JPG)
+
+#### loganalyzer 的常规部署要点：
+
+1. loganalyzer 也可直接使用解压的压缩包（PHP 源码）实现安装，方法位于部署脚本的最后注释部分。
+
+2. SELinux 为 enforcing 模式时，loganalyzer 无法与 MySQL 容器连接，需打开 PHP 与 MySQL
+
+   的网络连接布尔值以支持。
+
+   ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\selinux-php-mysql-connection.JPG)
