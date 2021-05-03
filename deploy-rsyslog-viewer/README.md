@@ -8,7 +8,7 @@
 
 #### 架构示例：
 
-<img src="D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-mysql-rsyslogserver.jpg" alt="loganalyzer-mysql-rsyslogserver"  />
+https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/loganalyzer-mysql-rsyslogserver.jpg
 
 如图所示，`rsyslog-server` 服务端收集来自 `rsyslog-client` 客户端发送的指定系统
 日志数据，并且 Apache httpd server 与 MySQL 数据库均已容器的方式一同部署于服务端。
@@ -34,9 +34,9 @@
 
 5. 将容器镜像上传至 Quay 中，需提前创建相应的 organizaion，否则将上传失败报错！
 
-   <img src="D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\quay-push-error-1.JPG"  />
+   https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/quay-push-error-1.JPG
 
-   <img src="D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\quay-push-error-2.JPG"  />
+   https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/quay-push-error-2.JPG
 
 6. 务必关闭并禁用节点 `firewalld` 服务，该服务与 `iptables NAT` 规则冲突，在启用的情况下
 
@@ -63,31 +63,31 @@
 
     不更改将无法运行容器，容器中报错日志如下所示：
 
-    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\mysql-container-run-error.JPG)
+    https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/mysql-container-run-error.JPG
 
 11. loganalyzer 容器与 MySQL 容器部署成功且正常运行后，需访问 loganalyzer 容器所在节点
 
     以完成两者的对接，如下所示：
 
-    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-web-1.JPG)
+    https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/loganalyzer-web-1.JPG
 
-    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-web-2.JPG)
+    https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/loganalyzer-web-2.JPG
+    
+    https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/loganalyzer-web-3.JPG
 
-    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-web-3.JPG)
+    https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/loganalyzer-web-4.JPG
 
-    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-web-4.JPG)
+    https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/loganalyzer-web-5.JPG
 
-    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-web-5.JPG)
+    https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/loganalyzer-web-6.JPG
 
-    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-web-6.JPG)
+    https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/loganalyzer-web-7.JPG
 
-    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-web-7.JPG)
+    https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/loganalyzer-web-8.JPG
 
-    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-web-8.JPG)
+    https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/loganalyzer-web-9.JPG
 
-    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-web-9.JPG)
-
-    ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\loganalyzer-web-10.JPG)
+    https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/loganalyzer-web-10.JPG
 
 #### loganalyzer 的常规部署要点：
 
@@ -97,4 +97,4 @@
 
    的网络连接布尔值以支持。
 
-   ![](D:\Linux操作系统与编程语言汇总\Typora文档汇总\Container\pictures\selinux-php-mysql-connection.JPG)
+   https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/selinux-php-mysql-connection.JPG
