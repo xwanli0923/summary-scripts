@@ -8,7 +8,7 @@
 
 #### 架构示例：
 
-https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/loganalyzer-mysql-rsyslogserver.jpg
+![](https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/loganalyzer-mysql-rsyslogserver.jpg)
 
 如图所示，`rsyslog-server` 服务端收集来自 `rsyslog-client` 客户端发送的指定系统
 日志数据，并且 Apache httpd server 与 MySQL 数据库均已容器的方式一同部署于服务端。
