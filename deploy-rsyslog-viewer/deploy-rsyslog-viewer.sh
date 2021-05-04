@@ -7,8 +7,8 @@
 # frontend, so httpd and php should be deployed.
 # 
 # Logical architecture:
-# 	user --> loganalyzer(php) container --> mysql container
-#		rsyslog server --> mysql container
+#   user --> loganalyzer(php) container --> mysql container
+#   rsyslog server --> mysql container
 # 
 # Created by hualongfeiyyy@163.com on 2021-04-03.
 #
@@ -29,28 +29,28 @@ LOGANALYZER_PASS=lyzeruser
 echo "---> Install associated packages"
 wget -O /etc/yum.repos.d/updates.repo  http://materials.example.com/updates.repo
 yum install -y mysql rsyslog-mysql \
-	podman-1.9.3-2.module+el8.2.1+6867+366c07d6.x86_64 skopeo; echo ""
+  podman-1.9.3-2.module+el8.2.1+6867+366c07d6.x86_64 skopeo; echo ""
 # rsyslog-mysql driver used to connect to mysql
 
 ### disable firewalld service ###
 echo "---> Disable firewalld service"
 if `systemctl is-active firewalld.service > /dev/null`; then
-	systemctl stop firewalld.service
-	systemctl disable firewalld.service
+  systemctl stop firewalld.service
+  systemctl disable firewalld.service
 fi
 # Note:
-# 	iptables conflict with firewalld, if firewalld is running
-# 	all iptables rules will disapear, so container port mapping
-# 	will be no effect!
+#   iptables conflict with firewalld, if firewalld is running
+#   all iptables rules will disapear, so container port mapping
+#   will be no effect!
 echo ""
 
 ### configure selinux http port ###
 echo "---> Configure selinux http port"
 SESTATUS=$(getenforce)
 if [[ ${SESTATUS} == "Enforcing" ]]; then
-	semanage port -a -t http_port_t -p tcp ${SE_HTTP_PORT}
-	echo "--> Current SELinux http port ..."
-	semanage port -l | grep -w http_port_t
+  semanage port -a -t http_port_t -p tcp ${SE_HTTP_PORT}
+  echo "--> Current SELinux http port ..."
+  semanage port -l | grep -w http_port_t
 fi
 echo ""
 
@@ -74,28 +74,28 @@ mkdir -p /var/lib/mysql && chown 27:27 /var/lib/mysql
 # failure.
 
 skopeo inspect \
-	docker://registry.lab.example.com/rhscl/mysql-57-rhel7:latest &> /dev/null
+  docker://registry.lab.example.com/rhscl/mysql-57-rhel7:latest &> /dev/null
 # ensure mysql-57-rhel7 container image in Quay
 # If rhscl organization is not existed, please create it first,
 # or this container image can be pushed into Quay!
 if [[ $? -eq 0 ]]; then
-	podman run -d \
-		--name rsyslog-mysqldb \
-		-e MYSQL_ROOT_PASSWORD=redhat \
-		-p 3306:3306 \
-		-v /var/lib/mysql:/var/lib/mysql/data:Z \
-		registry.lab.example.com/rhscl/mysql-57-rhel7:latest
-	echo "--> Wait several seconds to init mysql database ..."
-	sleep 10s
-	if `podman ps --format={{.Names}} | grep rsyslog-mysqldb &> /dev/null`; then
-		echo -e "--> $(date +'%F %T') [\033[1;36mNote\033[0m] rsyslog-mysqldb container running"
-	else
-		echo -e "--> $(date +'%F %T') [\033[1;31mERROR\033[0m] rsyslog-mysqldb container with ERRORs"
-		exit 1
-	fi
+  podman run -d \
+    --name rsyslog-mysqldb \
+    -e MYSQL_ROOT_PASSWORD=redhat \
+    -p 3306:3306 \
+    -v /var/lib/mysql:/var/lib/mysql/data:Z \
+    registry.lab.example.com/rhscl/mysql-57-rhel7:latest
+  echo "--> Wait several seconds to init mysql database ..."
+  sleep 10s
+  if `podman ps --format={{.Names}} | grep rsyslog-mysqldb &> /dev/null`; then
+    echo -e "--> $(date +'%F %T') [\033[1;36mNote\033[0m] rsyslog-mysqldb container running"
+  else
+    echo -e "--> $(date +'%F %T') [\033[1;31mERROR\033[0m] rsyslog-mysqldb container with ERRORs"
+    exit 1
+  fi
 else
-	echo -e "--> $(date +'%F %T') [\033[1;31mERROR\033[0m] No mysql container image in registry"
-	exit 1
+  echo -e "--> $(date +'%F %T') [\033[1;31mERROR\033[0m] No mysql container image in registry"
+  exit 1
 fi
 
 echo "--> Authorize mysql user for database"
@@ -118,12 +118,12 @@ quit
 "
 echo ""
 # Note:
-# 	As httpd, loganalyzer and mysql are deployed on the same node,
-#		loganalyzer container connect to mysql container through cni-podman0
-#		which is CNI gateway pre-allocated 10.88.0.1.
-#		So you should add this address to mysql user.
-#		If previous container is deployed on different node, just use
-# 	specified node NIC.
+#   As httpd, loganalyzer and mysql are deployed on the same node,
+#   loganalyzer container connect to mysql container through cni-podman0
+#   which is CNI gateway pre-allocated 10.88.0.1.
+#   So you should add this address to mysql user.
+#   If previous container is deployed on different node, just use
+#   specified node NIC.
 
 ### deploy rsyslog server ###
 echo "---> Deploy rsyslog server"
@@ -166,15 +166,15 @@ setsebool -P httpd_can_network_connect_db on && \
 echo "--> Set SELinux boolean successfully"
 podman load -i loganalyzer-viewer-1.0.tar
 podman run -d --name loganalyzer-viewer \
-	-p 8881:8881 \
-	registry.lab.example.com/rhscl/loganalyzer-viewer:1.0
+  -p 8881:8881 \
+  registry.lab.example.com/rhscl/loganalyzer-viewer:1.0
 
 sleep 5s
 if `podman ps --format={{.Names}} | grep loganalyzer-viewer &> /dev/null`; then
-    echo -e "--> $(date +'%F %T') [\033[1;36mNote\033[0m] loganalyzer-viewer container running"
+  echo -e "--> $(date +'%F %T') [\033[1;36mNote\033[0m] loganalyzer-viewer container running"
 else
-    echo -e "--> $(date +'%F %T') [\033[1;31mERROR\033[0m] loganalyzer-viewer container with ERRORs"
-    exit 1
+  echo -e "--> $(date +'%F %T') [\033[1;31mERROR\033[0m] loganalyzer-viewer container with ERRORs"
+  exit 1
 fi
 echo "--> All container as followings ..."
 podman ps --format="table {{.Names}} {{.Ports}} {{.Status}}"; echo ""
@@ -182,11 +182,11 @@ podman ps --format="table {{.Names}} {{.Ports}} {{.Status}}"; echo ""
 echo "---> Deploy successfully!"
 
   # Note:
-	# 	As previous mention, all container deployed on the same node.
-	# 	If you don't use podman container, you can also use rpm packages
-	# 	to deploy services. 
-	# 	Just like as followings:
-	# 
+  #   As previous mention, all container deployed on the same node.
+  #   If you don't use podman container, you can also use rpm packages
+  #   to deploy services. 
+  #   Just like as followings:
+  # 
   # yum install -y httpd php php-mysqlnd php-gd
   # # php-mysql in CentOS 7.x and php-mysqlnd in CentOS 8.x
   # echo "--> Deploy loganalyzer(php) ..."
@@ -200,11 +200,11 @@ echo "---> Deploy successfully!"
   # restorecon -Rv /web > /dev/null && ls -ldZ /web
   # chcon -t httpd_sys_rw_content_t /web/loganalyzer/config.php && \
   # 	ls -lZ /web/loganalyzer/config.php
-  # # httpd_sys_rw_content_t file context ensure the file could
-  # # be writeable
-	# setsebool -P httpd_can_network_connect on && \
-	# setsebool -P httpd_can_network_connect_db on
-	# # set SELinux boolean to allow php connect to mysql
+  ## httpd_sys_rw_content_t file context ensure the file could
+  ## be writeable
+  # setsebool -P httpd_can_network_connect on && \
+  # setsebool -P httpd_can_network_connect_db on
+  ## set SELinux boolean to allow php connect to mysql
   # cat > /etc/httpd/conf.d/loganalyzer-viewer.conf <<EOF
   # Listen 8881
   # <VirtualHost *:8881>
@@ -222,4 +222,3 @@ echo "---> Deploy successfully!"
   # echo "--> Apache httpd server status is ..."
   # systemctl start httpd.service
   # systemctl status httpd.service
-
