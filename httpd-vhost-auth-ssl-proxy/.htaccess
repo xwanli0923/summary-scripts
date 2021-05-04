@@ -4,32 +4,32 @@
 <RequireAll>
   AuthName "Learnpath user auth"
   
-	### basic-file authentication
+  ### basic-file authentication
   # AuthType Basic
   # AuthUserFile /webapp/data/learnpath/.auth_basic
   # Require valid-user
   
-	### basic-dbm authentication
+  ### basic-dbm authentication
   # AuthType Basic
   # AuthDBMUserFile /webapp/data/learnpath/.auth_dbm
   # AuthBasicProvider dbm
   
-	### digest authentication
+  ### digest authentication
   AuthType Digest
   AuthDigestProvider file
   AuthDigestDomain /
   AuthUserFile /webapp/data/learnpath/.auth_digest
   
   <Limit GET POST>
-  	Require user foo bar albert developer0
+    Require user foo bar albert developer0
   
-  	# all required users password: redhat
-  	# based-file: foo, bar
-  	# based-dbm: albert
-  	# digest: developer0
+    # all required users password: redhat
+    # based-file: foo, bar
+    # based-dbm: albert
+    # digest: developer0
   
-  	# If previous methods are used at the same time, priority is 
-  	# digest, based-dbm, based-file.
+    # If previous methods are used at the same time, priority is 
+    # digest, based-dbm, based-file.
   </Limit>
   
   Require all granted
