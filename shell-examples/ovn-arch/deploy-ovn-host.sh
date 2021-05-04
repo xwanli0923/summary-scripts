@@ -27,12 +27,12 @@ sudo systemctl start ovsdb-server ovs-vswitchd openvswitch ovn-controller
 # Verify OVS and OVN service status.
 echo "--- Checking OVS and OVN service status ---"
 for SRV in ovsdb-server ovs-vswitchd openvswitch ovn-controller; do
-    STATUS=$(sudo systemctl is-active ${SRV})
-    if [ ${STATUS} = "active" ]; then
-        echo " * ${SRV}: running ACTIVE ..."
-    else
-        echo " * ${SRV}: running ERROR ..."
-    fi
+  STATUS=$(sudo systemctl is-active ${SRV})
+  if [ ${STATUS} = "active" ]; then
+    echo " * ${SRV}: running ACTIVE ..."
+  else
+    echo " * ${SRV}: running ERROR ..."
+  fi
 done
 
 # Set remote OVN chassis controller.
