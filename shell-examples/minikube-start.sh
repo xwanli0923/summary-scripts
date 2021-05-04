@@ -22,4 +22,3 @@ if [ $? -eq 0 ]; then
 else
   echo "--- minikube start failed. ---"
 fi
-Format 
