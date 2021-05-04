@@ -28,12 +28,12 @@ sudo systemctl start ovsdb-server ovs-vswitchd openvswitch ovn-northd ovn-contro
 # Verify OVS and OVN service status.
 echo "--- Checking OVS and OVN service status ---"
 for SRV in ovsdb-server ovs-vswitchd openvswitch ovn-northd ovn-controller; do
-	STATUS=$(sudo systemctl is-active ${SRV})
-	if [ ${STATUS} = "active" ]; then
-		echo " * ${SRV}: running ACTIVE ..."
-	else
-		echo " * ${SRV}: running ERROR ..."
-	fi		
+  STATUS=$(sudo systemctl is-active ${SRV})
+  if [ ${STATUS} = "active" ]; then
+    echo " * ${SRV}: running ACTIVE ..."
+  else
+    echo " * ${SRV}: running ERROR ..."
+  fi		
 done
 
 # Enable ovsdb-server listen 6641 and 6642 port.
