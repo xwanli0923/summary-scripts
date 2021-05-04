@@ -8,7 +8,7 @@
 
 read -t 30 -p "Please type the website of mettulu: " URL
 DIR=$(curl -s ${URL} | grep '<title>'| awk -F 'title' '{print $2}' | \
-	  awk -F '_' '{print $1}' | sed 's/^>//')
+  awk -F '_' '{print $1}' | sed 's/^>//')
 mkdir -p ~/meitulu/"${DIR}"
 cd ~/meitulu/"${DIR}" 
 
@@ -17,7 +17,7 @@ TOTAL=$(curl -s ${URL} | grep 图片数量 | awk '{print $3}')
 PREFIX="https://mtl.gzhuibei.com/images/img/"
 
 for NUM in $(seq 1 ${TOTAL}); do
-  	MERGE=${PREFIX}${INDEX}/${NUM}.jpg
-  	echo "--- Capturing image from ${MERGE} ---"
-	curl -s ${MERGE} -o ${NUM}.jpg
+  MERGE=${PREFIX}${INDEX}/${NUM}.jpg
+  echo "--- Capturing image from ${MERGE} ---"
+  curl -s ${MERGE} -o ${NUM}.jpg
 done
