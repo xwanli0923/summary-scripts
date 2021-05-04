@@ -35,5 +35,5 @@
   Require all granted
   Require not ip 10.197.11.222
 	
-	# Require expr %{HTTP_USER_AGENT} != 'Chrome'
+  # Require expr %{HTTP_USER_AGENT} != 'Chrome'
 </RequireAll>
