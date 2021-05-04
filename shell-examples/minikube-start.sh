@@ -10,16 +10,16 @@
 
 echo "--- Starting minikube... ---"
 minikube start \
-	--container-runtime=crio \
-	--image-repository=registry.aliyuncs.com/google_containers
+  --container-runtime=crio \
+  --image-repository=registry.aliyuncs.com/google_containers
 
 if [ $? -eq 0 ]; then
-	echo "--- Enable minikube addons ---"
-	for ADDON in dashboard helm-tiller ingress ingress-dns istio istio-provisioner \
-		metrics-server registry registry-creds; do
-		minikube addons enable ${ADDON}
-	done
+  echo "--- Enable minikube addons ---"
+  for ADDON in dashboard helm-tiller ingress ingress-dns istio istio-provisioner \
+    metrics-server registry registry-creds; do
+    minikube addons enable ${ADDON}
+  done
 else
-	echo "--- minikube start failed. ---"
+  echo "--- minikube start failed. ---"
 fi
-
+Format 
