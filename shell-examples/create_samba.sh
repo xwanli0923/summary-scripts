@@ -31,12 +31,12 @@ echo ""
 ## Specified samba user
 read -p "--> Please specify samba user: " SMBUSER
 if `id ${SMBUSER} > /dev/null 2>&1`; then
-	usermod -aG winshare ${SMBUSER}
-	smbpasswd -a ${SMBUSER}
+  usermod -aG winshare ${SMBUSER}
+  smbpasswd -a ${SMBUSER}
 else	
-	useradd ${SMBUSER}; echo "redhat" | passwd --stdin ${SMBUSER}
-	usermod -aG winshare ${SMBUSER}
-	smbpasswd -a ${SMBUSER}
+  useradd ${SMBUSER}; echo "redhat" | passwd --stdin ${SMBUSER}
+  usermod -aG winshare ${SMBUSER}
+  smbpasswd -a ${SMBUSER}
 fi
 echo -e "\n---> The samba users are: \n$(pdbedit -L)\n"
 
