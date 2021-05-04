@@ -1,30 +1,30 @@
 #!/bin/bash
 
-#   Configure Red Hat Quay v3 internal registry.
-#   Deploy method through docker-1.13.1 engine.
+# Configure Red Hat Quay v3 internal registry.
+# Deploy method through docker-1.13.1 engine.
 #    
-#   * issue: 
-#       If use podman engine, quay container always can't 
-#		    be deployed successfully, and 443 port is always 
-#		    connected refused!
+# * issue: 
+#     If use podman engine, quay container always can't 
+#     be deployed successfully, and 443 port is always 
+#     connected refused!
 #
-#	  * use method:
-#		    1. run `config_quay' function
-#		    2. config quay through Web UI
-#		    3. run `deploy_quay' function
+# * use method:
+#     1. run `config_quay' function
+#     2. config quay through Web UI
+#     3. run `deploy_quay' function
 #    
-#   Created by hualf on 2020-08-03.
+# Created by hualf on 2020-08-03.
 
 function config_quay() {
   ### Install Docker ###
   echo "[*] Check docker package..."
   if `rpm -q docker > /dev/null`; then
-  	echo "    ---> Docker has been installled..."
+    echo "    ---> Docker has been installled..."
   else
-  	echo "    ---> Install docker package..."
-  	yum install -y docker
-  	systemctl enable docker.service
-  	systemctl start docker.service
+    echo "    ---> Install docker package..."
+    yum install -y docker
+    systemctl enable docker.service
+    systemctl start docker.service
   fi
   
   ### Create MySQL database container ###
@@ -38,24 +38,24 @@ function config_quay() {
   export MYSQL_ROOT_PASSWORD=redhat
   
   if `docker images | grep mysql > /dev/null`; then
-  	echo "    ---> mysql-57-rhel container image downloaded..."
+    echo "    ---> mysql-57-rhel container image downloaded..."
   else
-  	echo "    ---> Loading mysql-57-rhel container image..."
-  	docker load --input /root/mysql-57-rhel7.tar
+    echo "    ---> Loading mysql-57-rhel container image..."
+    docker load --input /root/mysql-57-rhel7.tar
   fi
   
   docker run \
-  	--detach \
-  	--restart=always \
-  	--env MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} \
-  	--env MYSQL_USER=${MYSQL_USER} \
-  	--env MYSQL_PASSWORD=${MYSQL_PASSWORD} \
-  	--env MYSQL_DATABASE=${MYSQL_DATABASE} \
-  	--name ${MYSQL_CONTAINER_NAME} \
-  	--privileged=true \
-  	--publish 3306:3306 \
-  	-v /var/lib/mysql:/var/lib/mysql/data:Z \
-  	registry.access.redhat.com/rhscl/mysql-57-rhel7
+    --detach \
+    --restart=always \
+    --env MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} \
+    --env MYSQL_USER=${MYSQL_USER} \
+    --env MYSQL_PASSWORD=${MYSQL_PASSWORD} \
+    --env MYSQL_DATABASE=${MYSQL_DATABASE} \
+    --name ${MYSQL_CONTAINER_NAME} \
+    --privileged=true \
+    --publish 3306:3306 \
+    -v /var/lib/mysql:/var/lib/mysql/data:Z \
+    registry.access.redhat.com/rhscl/mysql-57-rhel7
   
   ### Create Redis database container ###
   echo "[*] Create Redis database container..."
@@ -63,16 +63,16 @@ function config_quay() {
   chmod 777 /var/lib/redis
   
   if `docker images | grep redis > /dev/null`; then
-  	echo "    ---> redis-32-rhel7 container image downloaded..."
+    echo "    ---> redis-32-rhel7 container image downloaded..."
   else
-  	echo "    ---> Loading redis-32-rhel7 container image..."
-  	docker load --input /root/redis-32-rhel7.tar
+    echo "    ---> Loading redis-32-rhel7 container image..."
+    docker load --input /root/redis-32-rhel7.tar
   fi
   
   docker run \
     --detach \
     --restart=always \
-  	--publish 6379:6379 \
+    --publish 6379:6379 \
     --privileged=true \
     --name quay-redis \
     -v /var/lib/redis:/var/lib/redis/data:Z \
@@ -85,20 +85,20 @@ function config_quay() {
   ### Load Red Hat Quay v3 container image ###
   echo "[*] Load Red Hat Quay v3 container image..."
   if `docker images | grep quay > /dev/null`; then
-  	echo "    ---> quay container image downloaded..."
+    echo "    ---> quay container image downloaded..."
   else
-  	echo "    ---> Loading quay container image..."
-  	docker load --input /root/quay330.tar
+    echo "    ---> Loading quay container image..."
+    docker load --input /root/quay330.tar
   fi
   
   ### Configure Quay container ###
   docker run \
     --detach \
     --privileged=true \
-  	--name quay-config \
-   	--publish 8443:8443 \
+    --name quay-config \
+    --publish 8443:8443 \
     quay.io/redhat/quay:v3.3.0 \
-		config redhat
+    config redhat
 }
 
 ### Note ###
@@ -135,15 +135,15 @@ function deploy_quay() {
   ### Deploy Red Hat Quay v3 registry ###
   echo "[*] Deploy Red Hat Quay v3 registry..."
   docker run \
-  	--detach \
-  	--restart=always \
+    --detach \
+    --restart=always \
     --sysctl net.core.somaxconn=4096 \
     --privileged=true \
     --name quay-master \
     -v /mnt/quay/config:/conf/stack:Z \
     -v /mnt/quay/storage:/datastorage:Z \
-  	-p 443:8443 \
-  	-p 80:8080 \
+    -p 443:8443 \
+    -p 80:8080 \
     quay.io/redhat/quay:v3.3.0
   
   ### Verfify quay-associated container ###
