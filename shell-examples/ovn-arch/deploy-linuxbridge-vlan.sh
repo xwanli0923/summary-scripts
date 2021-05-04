@@ -29,12 +29,10 @@ brctl addif brvlan20 eth0.20
 brctl addif brvlan10 eth1
 # If you want to delete linux bridge, you must run following steps:
 #   ip link set brX down
-#	rm -f /etc/sysconfig/network-scripts/ifcfg-brX
+#	  rm -f /etc/sysconfig/network-scripts/ifcfg-brX
 #   brctl delif brX <INTERFACE>
 #   brctl delbr brX
 
-# Note:
-#   Devices which can be configured ip address: NIC, bridge, L2/L3 switch, router.
 # Configure ip address for linux bridge
 ifconfig brvlan10 192.168.0.254/24 up
 ifconfig brvlan20 192.168.1.254/24 up
