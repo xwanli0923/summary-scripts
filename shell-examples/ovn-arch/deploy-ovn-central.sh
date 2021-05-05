@@ -22,7 +22,7 @@ sudo yum install -y libibverbs
 
 # Enable and start OVS or OVN service.
 echo "--- Enable and start OVS and OVN service ---"
-sudo systemctl enable ovsdb-server ovs-vswitchd openvswitch	ovn-northd ovn-controller
+sudo systemctl enable ovsdb-server ovs-vswitchd openvswitch ovn-northd ovn-controller
 sudo systemctl start ovsdb-server ovs-vswitchd openvswitch ovn-northd ovn-controller
 
 # Verify OVS and OVN service status.
