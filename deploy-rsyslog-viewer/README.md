@@ -1,4 +1,4 @@
-# 部署loganalyzer管理集中式日志
+# 部署 loganalyzer 管理集中式日志
 #### 文档说明：
 
 1. OS 版本：Red Hat Enterprise Linux 8.2 (Ootpa)
