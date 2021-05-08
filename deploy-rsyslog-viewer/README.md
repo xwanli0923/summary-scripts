@@ -10,8 +10,9 @@
 
 ![](https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/loganalyzer-mysql-rsyslogserver.jpg)
 
-如图所示，`rsyslog-server` 服务端收集来自 `rsyslog-client` 客户端发送的指定系统日志数据，并且 Apache httpd server
-与 MySQL 数据库均以容器的方式一同部署于服务端。
+如图所示，`rsyslog-server` 服务端收集来自 `rsyslog-client` 客户端发送的指定系统日志数据，并且 Apache httpd 
+
+server 与 MySQL 数据库均以容器的方式一同部署于服务端。
 
 
 #### loganalyzer 与 MySQL 的容器化部署要点：
@@ -30,7 +31,9 @@
    
 3. 此次使用 **`podman runtime`** 容器运行时运行所有容器。
 
-4. 该部署环境中已预配置 `Red Hat Quay 3.3.0`，并且已将 `mysql-57-rhel7:latest` 上传至该容器镜像仓库中的 `rhscl organization` 中。
+4. 该部署环境中已预配置 `Red Hat Quay 3.3.0`，并且已将 `mysql-57-rhel7:latest` 上传至该容器镜像仓库中的 
+   
+   `rhscl organization` 中。
 
 5. 将容器镜像上传至 Quay 中，需提前创建相应的 organizaion，否则将上传失败报错！
 
@@ -39,10 +42,14 @@
    ![](https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/quay-push-error-2.JPG)
 
 6. 务必关闭并禁用节点 `firewalld` 服务，该服务与 `iptables NAT` 规则冲突，在启用的情况下将无法实现容器的端口映射，
+   
    iptables NAT 规则无法建立！
 
-7. 由于 loganalyzer 容器与 MySQL 容器均位于同一节点上，且容器通过 `CNI bridge` (cni-podman0) 连接，因此 loganalyzer 连接
-   MySQL 时应使用节点的 IP 地址，但 MySQL 对指定用户的授权语句应使用 CNI Gateway 的 IP 地址，否则在前端 Web 上无法建立连接。
+7. 由于 loganalyzer 容器与 MySQL 容器均位于同一节点上，且容器通过 `CNI bridge` (cni-podman0) 连接，因此 loganalyzer
+  
+   连接 MySQL 时应使用节点的 IP 地址，但 MySQL 对指定用户的授权语句应使用 CNI Gateway 的 IP 地址，否则在前端 Web 上
+   
+   无法建立连接。
    ```sql
    grant all on Syslog.* to '${SYSLOG_USER}'@'${CNI_GATEWAY}' identified by '${SYSLOG_PASS}';
    ```
@@ -54,7 +61,10 @@
 9. loganalyzer 项目基于 PHP，可作为 MySQL 数据库检索日志数据的 Web 前端。
 
 10. MySQL 容器使用持久化存储（卷映射）时，由于使用 Red Hat 官方镜像，启动容器时不使用 root 用户运行 mysql 守护进程，
-    而使用 **UID 27** (mysql) 运行，需设置宿主机映射目录的所有者与所属组，不更改将无法运行容器，容器中报错日志如下所示：
+
+    而使用 **UID 27** (mysql) 运行，需设置宿主机映射目录的所有者与所属组，不更改将无法运行容器。
+    
+    容器中报错日志如下所示：
     
     ![](https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/mysql-container-run-error.JPG)
 
