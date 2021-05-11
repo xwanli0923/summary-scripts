@@ -92,7 +92,7 @@ Apache httpd server 与 MySQL 数据库均以容器的方式一同部署于服�
 
     ![](https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/loganalyzer-web-9.JPG)
 
-    ![](https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/loganalyzer-web-10.JPG)
+    ![](https://github.com/Alberthua-Perl/summary-scripts/blob/master/deploy-rsyslog-viewer/images/loganalyzer-web-10.jpg)
 
 #### loganalyzer 的常规部署要点：
 
