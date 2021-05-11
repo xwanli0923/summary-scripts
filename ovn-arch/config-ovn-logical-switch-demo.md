@@ -239,7 +239,7 @@ cookie=0x0, duration=41654.019s, table=32, n_packets=4, n_bytes=168, idle_age=39
 ```
 
 ```bash
-![ovn-ls-geneve](D:\Linux操作系统与编程语言汇总\Typora文档汇总\SDN\pictures\ovn-ls-geneve.jpg)[godev@ovn-node2 ~]$ sudo ovs-ofctl dump-flows br-int | less
+[godev@ovn-node2 ~]$ sudo ovs-ofctl dump-flows br-int | less
 cookie=0x0, duration=145339.866s, table=0, n_packets=20, n_bytes=1512, idle_age=2017, hard_age=65534, priority=100,in_port=1 actions=move:NXM_NX_TUN_ID[0..23]->OXM_OF_METADATA[0..23],move:NXM_NX_TUN_METADATA0[16..30]->NXM_NX_REG14[0..14],move:NXM_NX_TUN_METADATA0[0..15]->NXM_NX_REG15[0..15],resubmit(,33)
 # 将 Geneve 隧道数据包的 VNI 去除，并根据数据包中的 OVN 逻辑入端口与出端口的元数据设置本地的寄存器。
 cookie=0x0, duration=56135.741s, table=33, n_packets=16, n_bytes=1344, idle_age=2017, priority=100,reg15=0x2,metadata=0x1 actions=load:0x1->NXM_NX_REG13[],load:0x3->NXM_NX_REG11[],load:0x2->NXM_NX_REG12[],resubmit(,34)
